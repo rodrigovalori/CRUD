@@ -1,21 +1,30 @@
 package com.example.demo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.junit.jupiter.api.Test;
 
-@SpringBootApplication
-@RestController
-class DemoApplication {
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+class DemoApplicationTests {
+
+	Calculator underTest = new Calculator();
+
+	@Test
+	void itShouldAddNumbers() {
+		// given
+		int numberOne = 20;
+		int numberTwo = 30;
+
+		// when
+		int result = underTest.add(numberOne, numberTwo);
+
+		// then
+		int expected = 50;
+		assertThat(result).isEqualTo(expected);
 	}
 
-	@GetMapping
-	public String hello(){
-		return  "Hello World!";
+	static class Calculator {
+		int add(int a, int b) {
+			return a + b;
+		}
 	}
-
 }
