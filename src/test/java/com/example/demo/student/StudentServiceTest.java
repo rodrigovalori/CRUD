@@ -76,15 +76,17 @@ class StudentServiceTest {
                 LocalDate.of(1999, Month.AUGUST, 6)
         );
 
-        // given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(Optional.of(student));
+        given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(Optional.of(student));
 
         // when
         // then
-        assertThatThrownBy(() ->underTest.addNewStudent(student))
+        assertThatThrownBy(() -> underTest.addNewStudent(student))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Email " + student.getEmail() + " taken!");
 
-        verify(studentRepository, never()).save(any());
+        assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Email " + student.getEmail() + " taken!");
     }
 
     @Test
@@ -124,11 +126,28 @@ class StudentServiceTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
 
-        verify(studentRepository, never()).deleteById(any());
+        assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
     }
 
-    @Test
+/*    @Test
     @Disabled
     void canUpdateStudent() {
-    }
+        // given
+        Student student = new Student(
+                "Rodrigo",
+                "rodrigovalori@hotmail.com",
+                LocalDate.of(1999, Month.AUGUST, 6)
+        );
+        studentRepository.save(student);
+
+        // when
+        given(studentRepository.existsById(student.getId())).willReturn(false);
+
+        // then
+        assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
+    }*/
 }

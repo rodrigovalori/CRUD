@@ -11,7 +11,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
 @DataJpaTest
 class StudentRepositoryTest {
 
@@ -50,10 +49,10 @@ class StudentRepositoryTest {
         );
         underTest.save(student);
 
-        String emailFalse = "rodrigofalse@hotmail.com";
+        String email = "rodrigofalse@hotmail.com";
 
         // when
-        Optional<Student> expected = underTest.findStudentByEmail(emailFalse);
+        Optional<Student> expected = underTest.findStudentByEmail(email);
 
         // then
         assertThat(expected.isPresent()).isFalse();
