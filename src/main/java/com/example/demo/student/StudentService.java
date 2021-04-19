@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,10 +24,10 @@ public class StudentService {
     }
 
     public void addNewStudent(Student student) {
-        Optional<Student> studentOptional = studentRepository
+        Optional<Student> studentEmailExists = studentRepository
                 .findStudentByEmail(student.getEmail());
-        if (studentOptional.isPresent()) {
-            throw new IllegalStateException("email taken");
+        if (studentEmailExists.isPresent()) {
+            throw new IllegalStateException("Email " + student.getEmail() + " taken!");
         }
         studentRepository.save(student);
     }
@@ -38,7 +36,7 @@ public class StudentService {
         boolean exists = studentRepository.existsById(studentId);
         if (!exists) {
             throw new IllegalStateException(
-                    "student with id " + studentId + " does not exists");
+                    "Student with id " + studentId + " does not exists!");
         }
         studentRepository.deleteById(studentId);
     }
@@ -49,7 +47,7 @@ public class StudentService {
                               String email) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalStateException(
-                        "student with id " + studentId + " does not exists"));
+                        "Student with id " + studentId + " does not exists"));
 
         if (name != null &&
                 name.length() > 0 &&
@@ -60,10 +58,10 @@ public class StudentService {
         if (email != null &&
                email.length() > 0 &&
                !Objects.equals(student.getEmail(), email)) {
-            Optional<Student> studentOptional = studentRepository
+            Optional<Student> studentEmailExists = studentRepository
                     .findStudentByEmail(email);
-            if (studentOptional.isPresent()) {
-                throw new IllegalStateException("email taken");
+            if (studentEmailExists.isPresent()) {
+                throw new IllegalStateException("Email taken");
             }
             student.setEmail(email);
         }
