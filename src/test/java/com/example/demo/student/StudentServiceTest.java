@@ -82,10 +82,15 @@ class StudentServiceTest {
         studentRepository.save(student);
 
         given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(Optional.of(student));
+        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
 
         // when
         // then
         assertThatThrownBy(() -> underTest.addNewStudent(student))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Email " + student.getEmail() + " taken!");
+
+        assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Email " + student.getEmail() + " taken!");
     }
@@ -134,22 +139,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void exceptionWhenEmailIsNotValid() {
-        // given
-        Student student = new Student(
-                "Rodrigo",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
-        );
+    void updateStudent() {
 
-        studentRepository.save(student);
-
-        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Email " + student.getEmail() + " is not valid!");
     }
 }

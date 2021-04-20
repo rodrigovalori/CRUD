@@ -53,12 +53,20 @@ public class StudentService {
         if (name != null &&
                 name.length() > 0) {
             student.setName(name);
+        } else {
+            throw new IllegalStateException("Name is not valid!");
         }
 
         if (email != null &&
-               email.length() > 0) {
-                throw new IllegalStateException("Email " + student.getEmail() + " is not valid!");
+                email.length() > 0) {
+            Optional<Student> existsByEmail = studentRepository.findStudentByEmail(email);
+            if (existsByEmail.isPresent()) {
+                throw new IllegalStateException("Email " + student.getEmail() + " taken!");
+            } else {
+                student.setEmail(email);
+            }
+        } else {
+                throw new IllegalStateException("Email is not valid!");
         }
-        student.setEmail(email);
     }
 }
