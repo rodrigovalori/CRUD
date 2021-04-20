@@ -21,7 +21,8 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
 
-    @Mock private StudentRepository studentRepository;
+    @Mock
+    private StudentRepository studentRepository;
     private AutoCloseable autoCloseable;
     private StudentService underTest;
 
@@ -37,7 +38,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void canGetStudents() {
+    void getStudent() {
         // when
         underTest.getStudents();
 
@@ -46,7 +47,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void canAddNewStudent() {
+    void addNewStudent() {
         // given
         Student student = new Student(
                 "Rodrigo",
@@ -78,6 +79,8 @@ class StudentServiceTest {
                 LocalDate.of(1999, Month.AUGUST, 6)
         );
 
+        studentRepository.save(student);
+
         given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(Optional.of(student));
 
         // when
@@ -85,27 +88,20 @@ class StudentServiceTest {
         assertThatThrownBy(() -> underTest.addNewStudent(student))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Email " + student.getEmail() + " taken!");
-
-        //assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
-        //        .isInstanceOf(IllegalStateException.class)
-        //        .hasMessageContaining("Email " + student.getEmail() + " taken!");
     }
 
     @Test
-    void canDeleteStudent() {
+    void deleteStudent() {
         // given
         Student student = new Student(
                 "Rodrigo",
                 "rodrigovalori@hotmail.com",
                 LocalDate.of(1999, Month.AUGUST, 6)
         );
-        student.setId(1L);
+
         studentRepository.save(student);
 
         given(studentRepository.existsById(student.getId())).willReturn(true);
-        boolean expected = studentRepository.existsById(student.getId());
-
-        assertThat(expected).isTrue();
 
         // when
         underTest.deleteStudent(student.getId());
@@ -137,23 +133,23 @@ class StudentServiceTest {
                 .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
     }
 
-/*    @Test
-    @Disabled
-    void canUpdateStudent() {
+    @Test
+    void exceptionWhenEmailIsNotValid() {
         // given
         Student student = new Student(
                 "Rodrigo",
                 "rodrigovalori@hotmail.com",
                 LocalDate.of(1999, Month.AUGUST, 6)
         );
+
         studentRepository.save(student);
 
-        // when
-        given(studentRepository.existsById(student.getId())).willReturn(false);
+        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
 
+        // when
         // then
         assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
-    }*/
+                .hasMessageContaining("Email " + student.getEmail() + " is not valid!");
+    }
 }

@@ -51,20 +51,14 @@ public class StudentService {
                         "Student with id " + studentId + " does not exists!"));
 
         if (name != null &&
-                name.length() > 0 &&
-                !Objects.equals(student.getName(), name)) {
+                name.length() > 0) {
             student.setName(name);
         }
 
         if (email != null &&
-               email.length() > 0 &&
-               !Objects.equals(student.getEmail(), email)) {
-            Optional<Student> studentEmailExists = studentRepository
-                    .findStudentByEmail(email);
-            if (studentEmailExists.isPresent()) {
-                throw new IllegalStateException("Email " + student.getEmail() + " taken!");
-            }
-            student.setEmail(email);
+               email.length() > 0) {
+                throw new IllegalStateException("Email " + student.getEmail() + " is not valid!");
         }
+        student.setEmail(email);
     }
 }
