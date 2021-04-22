@@ -144,15 +144,22 @@ class StudentServiceTest {
     @Test
     void updateStudent() {
         // given
-        Student student = new Student("Rod",
-                "rodrigo@hotmail.com",
+        Student student = new Student("Rodrigo",
+                "rodrigovalori@hotmail.com",
                 LocalDate.of(1999, Month.AUGUST, 6));
 
         studentRepository.save(student);
 
+        String name = "Rod";
+        String email = "rod@hotmail.com";
+
+        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
+
         // when
-        boolean studentOptional = underTest.updateStudent(student.getId(), student.getName(), student.getEmail());
+        underTest.updateStudent(student.getId(), name, email);
 
         // then
+        assertThat(student.getName()).isEqualTo(name);
+        assertThat(student.getEmail()).isEqualTo(email);
     }
 }

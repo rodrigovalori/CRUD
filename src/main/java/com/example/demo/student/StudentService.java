@@ -41,9 +41,9 @@ public class StudentService {
     }
 
     @Transactional
-    public boolean updateStudent(Long studentId,
-                                 String name,
-                                 String email) {
+    public void updateStudent(Long studentId,
+                              String name,
+                              String email) {
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalStateException(
@@ -62,6 +62,5 @@ public class StudentService {
             }
             student.setEmail(email);
         }
-        return false;
     }
 }
