@@ -12,7 +12,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
-class StudentRepositoryTest {
+public class StudentRepositoryTest {
 
     @Autowired
     private StudentRepository underTest;
@@ -53,6 +53,40 @@ class StudentRepositoryTest {
 
         // when
         Optional<Student> expected = underTest.findStudentByEmail(email);
+
+        // then
+        assertThat(expected.isPresent()).isFalse();
+    }
+
+    @Test
+    void checkIfStudentIDExists() {
+        // given
+        Student student = new Student(
+                "Rodrigo Valori",
+                "rodrigovalori@hotmail.com",
+                LocalDate.of(1999, Month.AUGUST, 6)
+        );
+        underTest.save(student);
+
+        // when
+        Optional<Student> expected = underTest.findById(student.getId());
+
+        // then
+        assertThat(expected.isPresent()).isTrue();
+    }
+
+    @Test
+    void checkIfStudentIDDoesNotExists() {
+        // given
+        Student student = new Student(
+                "Rodrigo Valori",
+                "rodrigovalori@hotmail.com",
+                LocalDate.of(1999, Month.AUGUST, 6)
+        );
+        underTest.save(student);
+
+        // when
+        Optional<Student> expected = underTest.findById(10L);
 
         // then
         assertThat(expected.isPresent()).isFalse();
