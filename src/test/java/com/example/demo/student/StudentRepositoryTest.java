@@ -49,7 +49,7 @@ class StudentRepositoryTest {
         );
         underTest.save(student);
 
-        String email = "rodrigofalse@hotmail.com";
+        String email = "rod@hotmail.com";
 
         // when
         Optional<Student> expected = underTest.findStudentByEmail(email);
