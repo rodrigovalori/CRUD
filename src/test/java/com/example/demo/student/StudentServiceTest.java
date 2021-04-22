@@ -1,5 +1,7 @@
 package com.example.demo.student;
 
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
@@ -121,8 +124,8 @@ class StudentServiceTest {
         Student student = new Student(
                 "Rodrigo",
                 "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
-        );
+                LocalDate.of(1999, Month.AUGUST, 6));
+
         studentRepository.save(student);
 
         // when
@@ -131,15 +134,25 @@ class StudentServiceTest {
         // then
         assertThatThrownBy(() -> underTest.deleteStudent(student.getId()))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
+                .hasMessageContaining("Student with id " + student.getId() + " does not exist!");
 
         assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
+                .hasMessageContaining("Student with id " + student.getId() + " does not exist!");
     }
 
     @Test
     void updateStudent() {
+        // given
+        Student student = new Student("Rod",
+                "rodrigo@hotmail.com",
+                LocalDate.of(1999, Month.AUGUST, 6));
 
+        studentRepository.save(student);
+
+        // when
+        boolean studentOptional = underTest.updateStudent(student.getId(), student.getName(), student.getEmail());
+
+        // then
     }
 }
