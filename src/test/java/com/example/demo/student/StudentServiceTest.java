@@ -107,8 +107,6 @@ class StudentServiceTest {
                 LocalDate.of(1999, Month.AUGUST, 6)
         );
 
-        studentRepository.save(student);
-
         given(studentRepository.existsById(student.getId())).willReturn(true);
 
         // when
