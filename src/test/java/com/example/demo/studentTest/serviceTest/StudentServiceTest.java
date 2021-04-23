@@ -1,8 +1,11 @@
-package com.example.demo.student;
+package com.example.demo.studentTest.serviceTest;
 
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ObjectAssert;
-import org.junit.jupiter.api.*;
+import com.example.demo.student.model.Student;
+import com.example.demo.student.repository.StudentRepository;
+import com.example.demo.student.service.StudentService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -15,11 +18,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {

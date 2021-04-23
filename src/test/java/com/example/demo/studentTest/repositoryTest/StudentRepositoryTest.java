@@ -1,5 +1,7 @@
-package com.example.demo.student;
+package com.example.demo.studentTest.repositoryTest;
 
+import com.example.demo.student.model.Student;
+import com.example.demo.student.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

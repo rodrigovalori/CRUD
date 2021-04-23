@@ -1,5 +1,7 @@
-package com.example.demo.student;
+package com.example.demo.student.service;
 
+import com.example.demo.student.model.Student;
+import com.example.demo.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -56,7 +58,7 @@ public class StudentService {
                 email.length() > 0) {
             Optional<Student> existsByEmail = studentRepository.findStudentByEmail(email);
             if (existsByEmail.isPresent()) {
-                throw new IllegalStateException("Email " + student.getEmail() + " taken!");
+                throw new IllegalStateException("Email " + email + " taken!");
             }
             student.setEmail(email);
         }

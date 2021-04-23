@@ -1,11 +1,12 @@
-package com.example.demo.student;
+package com.example.demo.student.config;
 
+import com.example.demo.student.model.Student;
+import com.example.demo.student.repository.StudentRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static java.time.Month.*;
@@ -20,13 +21,13 @@ public class StudentConfig {
             Student rodrigo = new Student(
                     "Rodrigo",
                     "rodrigovalori@hotmail.com",
-                    LocalDate.of(1999, AUGUST, 06)
+                    LocalDate.of(1999, AUGUST, 6)
             );
 
             Student sophia = new Student(
                     "Sophia",
                     "sophiazuppo@gmail.com",
-                    LocalDate.of(2001, MAY, 03)
+                    LocalDate.of(2001, MAY, 3)
             );
 
             repository.saveAll(

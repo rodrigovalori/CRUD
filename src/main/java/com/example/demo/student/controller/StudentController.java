@@ -1,5 +1,7 @@
-package com.example.demo.student;
+package com.example.demo.student.controller;
 
+import com.example.demo.student.model.Student;
+import com.example.demo.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +24,9 @@ public class StudentController {
     }
 
     @PostMapping
-    public void registerNewStudent(@RequestBody Student student) {
+    public String addNewStudent(@RequestBody Student student) {
         studentService.addNewStudent(student);
+        return ("Student " + student.getName() + " added!");
     }
 
     @DeleteMapping(path = "{studentId}")
@@ -34,10 +37,11 @@ public class StudentController {
     }
 
     @PutMapping(path = "{studentId}")
-    public void updateStudent(
+    public String updateStudent(
             @PathVariable("studentId") Long studentId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email) {
         studentService.updateStudent(studentId, name, email);
+        return ("Student with id " + studentId + " updated!");
     }
 }
