@@ -24,7 +24,7 @@ public class StudentService {
 
     public void addNewStudent(Student student) {
         Optional<Student> studentEmailExists = studentRepository
-                .findStudentByEmail(student.getEmail());
+                .findByEmail(student.getEmail());
         if (studentEmailExists.isPresent()) {
             throw new IllegalStateException("Email " + student.getEmail() + " taken!");
         }
@@ -56,7 +56,7 @@ public class StudentService {
 
         if (email != null &&
                 email.length() > 0) {
-            Optional<Student> existsByEmail = studentRepository.findStudentByEmail(email);
+            Optional<Student> existsByEmail = studentRepository.findByEmail(email);
             if (existsByEmail.isPresent()) {
                 throw new IllegalStateException("Email " + email + " taken!");
             }

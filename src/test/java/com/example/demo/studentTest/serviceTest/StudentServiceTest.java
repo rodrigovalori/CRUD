@@ -84,7 +84,7 @@ class StudentServiceTest {
 
         studentRepository.save(student);
 
-        given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(Optional.of(student));
+        given(studentRepository.findByEmail(student.getEmail())).willReturn(Optional.of(student));
         given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
 
         // when
