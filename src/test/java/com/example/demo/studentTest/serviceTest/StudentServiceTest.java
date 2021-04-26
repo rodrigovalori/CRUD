@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Optional;
 
+import static java.time.Month.AUGUST;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -53,9 +54,9 @@ class StudentServiceTest {
     void addNewStudent() {
         // given
         Student student = new Student(
-                "Rodrigo",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
+                "Bruce Wayne",
+                "batman@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
         );
 
         // when
@@ -77,12 +78,10 @@ class StudentServiceTest {
     void exceptionWhenEmailIsTaken() {
         // given
         Student student = new Student(
-                "Rodrigo",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
         );
-
-        studentRepository.save(student);
 
         given(studentRepository.findByEmail(student.getEmail())).willReturn(Optional.of(student));
         given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
@@ -102,9 +101,9 @@ class StudentServiceTest {
     void deleteStudent() {
         // given
         Student student = new Student(
-                "Rodrigo",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
         );
 
         given(studentRepository.existsById(student.getId())).willReturn(true);
@@ -120,11 +119,10 @@ class StudentServiceTest {
     void exceptionWhenIdNotFound() {
         // given
         Student student = new Student(
-                "Rodrigo",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6));
-
-        studentRepository.save(student);
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
+        );
 
         // when
         given(studentRepository.existsById(student.getId())).willReturn(false);
@@ -142,14 +140,16 @@ class StudentServiceTest {
     @Test
     void updateStudent() {
         // given
-        Student student = new Student("Rodrigo",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6));
+        Student student = new Student(
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
+        );
 
         studentRepository.save(student);
 
-        String name = "Rod";
-        String email = "rod@hotmail.com";
+        String name = "Peter";
+        String email = "peter@gmail.com";
 
         given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
 

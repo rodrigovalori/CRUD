@@ -1,5 +1,4 @@
-/*
-package com.example.demo.studentTest.controllerTest;
+package com.example.demo.studentTest.basicAuthTest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -12,12 +11,12 @@ import static io.restassured.RestAssured.given;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT)
 
-    public class StudentControllerTest {
+    public class BasicAuthTest {
 
         @Test
         public void BasicAuthenticationTest_whenStatusCode_200(){
             given().auth()
-                    .basic("admin", "admin")
+                    .basic("admin", "password")
                     .when()
                     .get("http://localhost:8080/api/v1/student")
                     .then()
@@ -39,7 +38,7 @@ import static io.restassured.RestAssured.given;
         @Test
         public void BasicAuthenticationTest_whenStatusCode_404(){
             given().auth()
-                    .basic("admin", "admin")
+                    .basic("admin", "password")
                     .when()
                     .get("http://localhost:8080/api/v1/stud")
                     .then()
@@ -47,4 +46,3 @@ import static io.restassured.RestAssured.given;
                     .statusCode(HttpStatus.NOT_FOUND.value());
         }
     }
- */

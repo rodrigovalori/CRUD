@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.Optional;
 
+import static java.time.Month.AUGUST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
@@ -28,10 +28,11 @@ public class StudentRepositoryTest {
     void checkIfStudentEmailExists() {
         // given
         Student student = new Student(
-                "Rodrigo Valori",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
         );
+
         underTest.save(student);
 
         // when
@@ -45,18 +46,55 @@ public class StudentRepositoryTest {
     void checkIfStudentEmailDoesNotExists() {
         // given
         Student student = new Student(
-                "Rodrigo Valori",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
         );
+
         underTest.save(student);
 
-        String email = "rod@hotmail.com";
+        String email = "peter@gmail.com";
 
         // when
         Optional<Student> expected = underTest.findByEmail(email);
 
         // then
         assertThat(expected.isPresent()).isFalse();
+    }
+
+    @Test
+    void checkIfStudentIdExists() {
+        //given
+        Student student = new Student(
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
+        );
+
+        underTest.save(student);
+
+        //when
+        boolean expected = underTest.existsById(student.getId());
+
+        //then
+        assertThat(expected).isTrue();
+    }
+
+    @Test
+    void checkIfStudentIdDoesNotExists() {
+        //given
+        Student student = new Student(
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
+        );
+
+        underTest.save(student);
+
+        //when
+        boolean expected = underTest.existsById(10L);
+
+        //then
+        assertThat(expected).isFalse();
     }
 }
