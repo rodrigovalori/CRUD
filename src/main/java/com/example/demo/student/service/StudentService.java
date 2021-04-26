@@ -18,8 +18,16 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<Student> getStudents() {
+    public List<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+
+    public Optional<Student> getStudentById(Long studentId) {
+        boolean exists = studentRepository.existsById(studentId);
+        if(!exists) {
+            throw new IllegalStateException("Student with id " + studentId + " does not exist!");
+        }
+        return studentRepository.findById(studentId);
     }
 
     public void addNewStudent(Student student) {

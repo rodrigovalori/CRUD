@@ -43,7 +43,7 @@ class StudentServiceTest {
     @Test
     void getStudent() {
         // when
-        underTest.getStudents();
+        underTest.getAllStudents();
 
         // then
         verify(studentRepository).findAll();
