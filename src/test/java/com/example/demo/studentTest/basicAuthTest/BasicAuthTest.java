@@ -40,7 +40,7 @@ import static io.restassured.RestAssured.given;
             given().auth()
                     .basic("admin", "password")
                     .when()
-                    .get("http://localhost:8080/api/v1/stud")
+                    .get("http://localhost:8080/api/v1/studentstudent")
                     .then()
                     .assertThat()
                     .statusCode(HttpStatus.NOT_FOUND.value());
