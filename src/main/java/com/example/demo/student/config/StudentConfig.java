@@ -18,20 +18,20 @@ public class StudentConfig {
     CommandLineRunner commandLineRunner(
             StudentRepository repository) {
         return args -> {
-            Student rodrigo = new Student(
+            Student peterParker = new Student(
                     "Peter Parker",
                     "spiderMan@gmail.com",
                     LocalDate.of(2001, AUGUST, 10)
             );
 
-            Student sophia = new Student(
+            Student tonyStark = new Student(
                     "Tony Stark",
                     "ironMan@gmail.com",
                     LocalDate.of(1970, MAY, 29)
             );
 
             repository.saveAll(
-                    List.of(rodrigo, sophia)
+                    List.of(peterParker, tonyStark)
             );
         };
     }

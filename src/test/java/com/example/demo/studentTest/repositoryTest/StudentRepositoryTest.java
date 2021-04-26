@@ -59,38 +59,4 @@ public class StudentRepositoryTest {
         // then
         assertThat(expected.isPresent()).isFalse();
     }
-
-    @Test
-    void checkIfStudentIDExists() {
-        // given
-        Student student = new Student(
-                "Rodrigo Valori",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
-        );
-        underTest.save(student);
-
-        // when
-        Optional<Student> expected = underTest.findById(student.getId());
-
-        // then
-        assertThat(expected.isPresent()).isTrue();
-    }
-
-    @Test
-    void checkIfStudentIDDoesNotExists() {
-        // given
-        Student student = new Student(
-                "Rodrigo Valori",
-                "rodrigovalori@hotmail.com",
-                LocalDate.of(1999, Month.AUGUST, 6)
-        );
-        underTest.save(student);
-
-        // when
-        Optional<Student> expected = underTest.findById(10L);
-
-        // then
-        assertThat(expected.isPresent()).isFalse();
-    }
 }
