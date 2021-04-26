@@ -1,4 +1,4 @@
-package com.example.demo.studentTest.serviceTest;
+package com.example.demo.studentTest.serviceUnitTests;
 
 import com.example.demo.student.model.Student;
 import com.example.demo.student.repository.StudentRepository;
@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.Optional;
 
 import static java.time.Month.AUGUST;

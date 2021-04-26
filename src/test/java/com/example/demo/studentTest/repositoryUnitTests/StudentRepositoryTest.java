@@ -1,4 +1,4 @@
-package com.example.demo.studentTest.repositoryTest;
+package com.example.demo.studentTest.repositoryUnitTests;
 
 import com.example.demo.student.model.Student;
 import com.example.demo.student.repository.StudentRepository;
@@ -74,10 +74,10 @@ public class StudentRepositoryTest {
         underTest.save(student);
 
         //when
-        boolean expected = underTest.existsById(student.getId());
+        Optional<Student> expected = underTest.findById(student.getId());
 
         //then
-        assertThat(expected).isTrue();
+        assertThat(expected.isPresent()).isTrue();
     }
 
     @Test
@@ -92,9 +92,9 @@ public class StudentRepositoryTest {
         underTest.save(student);
 
         //when
-        boolean expected = underTest.existsById(10L);
+        Optional<Student> expected = underTest.findById(10L);
 
         //then
-        assertThat(expected).isFalse();
+        assertThat(expected.isPresent()).isFalse();
     }
 }
