@@ -9,10 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static java.time.Month.AUGUST;
@@ -50,11 +52,29 @@ class StudentServiceTest {
     }
 
     @Test
+    void getStudentById() {
+        // given
+        Student student = new Student(
+                "Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)
+        );
+
+        // when
+        given(studentRepository.findStudentById(student.getId())).willReturn(Optional.of(student));
+
+        underTest.getStudentById(student.getId());
+
+        // then
+        verify(studentRepository).findById(student.getId());
+    }
+
+    @Test
     void addNewStudent() {
         // given
         Student student = new Student(
-                "Bruce Wayne",
-                "batman@gmail.com",
+                "Peter Parker",
+                "spiderMan@gmail.com",
                 LocalDate.of(2001, AUGUST, 10)
         );
 
@@ -82,7 +102,7 @@ class StudentServiceTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
-        given(studentRepository.findByEmail(student.getEmail())).willReturn(Optional.of(student));
+        given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(Optional.of(student));
         given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
 
         // when

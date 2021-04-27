@@ -22,17 +22,17 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Optional<Student> getStudentById(Long studentId) {
-        boolean exists = studentRepository.existsById(studentId);
-        if(!exists) {
+    public List<Student> getStudentById(Long studentId) {
+        Optional<Student> existsById = studentRepository.findById(studentId);
+        if(!existsById.isPresent()) {
             throw new IllegalStateException("Student with id " + studentId + " does not exist!");
         }
-        return studentRepository.findById(studentId);
+        return studentRepository.findStudentById(studentId);
     }
 
     public void addNewStudent(Student student) {
         Optional<Student> studentEmailExists = studentRepository
-                .findByEmail(student.getEmail());
+                .findStudentByEmail(student.getEmail());
         if (studentEmailExists.isPresent()) {
             throw new IllegalStateException("Email " + student.getEmail() + " taken!");
         }
@@ -64,7 +64,7 @@ public class StudentService {
 
         if (email != null &&
                 email.length() > 0) {
-            Optional<Student> existsByEmail = studentRepository.findByEmail(email);
+            Optional<Student> existsByEmail = studentRepository.findStudentByEmail(email);
             if (existsByEmail.isPresent()) {
                 throw new IllegalStateException("Email " + email + " taken!");
             }
