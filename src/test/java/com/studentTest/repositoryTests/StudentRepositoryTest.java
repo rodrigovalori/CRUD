@@ -36,7 +36,7 @@ public class StudentRepositoryTest {
         underTest.save(student);
 
         // when
-        Optional<Student> expected = underTest.findStudentByEmail(student.getEmail());
+        Optional<Student> expected = underTest.findByEmail(student.getEmail());
 
         // then
         assertThat(expected.isPresent()).isTrue();
@@ -56,45 +56,9 @@ public class StudentRepositoryTest {
         String email = "peter@gmail.com";
 
         // when
-        Optional<Student> expected = underTest.findStudentByEmail(email);
+        Optional<Student> expected = underTest.findByEmail(email);
 
         // then
-        assertThat(expected.isPresent()).isFalse();
-    }
-
-    @Test
-    void checkIfStudentIdExists() {
-        //given
-        Student student = new Student(
-                "Peter Parker",
-                "spiderMan@gmail.com",
-                LocalDate.of(2001, AUGUST, 10)
-        );
-
-        underTest.save(student);
-
-        //when
-        Optional<Student> expected = underTest.findById(student.getId());
-
-        //then
-        assertThat(expected.isPresent()).isTrue();
-    }
-
-    @Test
-    void checkIfStudentIdDoesNotExists() {
-        //given
-        Student student = new Student(
-                "Peter Parker",
-                "spiderMan@gmail.com",
-                LocalDate.of(2001, AUGUST, 10)
-        );
-
-        underTest.save(student);
-
-        //when
-        Optional<Student> expected = underTest.findById(10L);
-
-        //then
         assertThat(expected.isPresent()).isFalse();
     }
 }

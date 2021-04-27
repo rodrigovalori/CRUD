@@ -5,6 +5,7 @@ import com.student.repository.StudentRepository;
 import com.student.service.StudentService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -59,9 +60,9 @@ class StudentServiceTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
-        studentRepository.save(student);
-
         student.setId(1L);
+
+        studentRepository.save(student);
 
         // when
         given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
@@ -69,7 +70,7 @@ class StudentServiceTest {
         underTest.getStudentById(student.getId());
 
         // then
-        verify(studentRepository).findStudentById(student.getId());
+        assertThat(studentRepository.findById(student.getId())).isEqualTo(Optional.of(student));
     }
 
     @Test
@@ -105,7 +106,7 @@ class StudentServiceTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
-        given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(of(student));
+        given(studentRepository.findByEmail(student.getEmail())).willReturn(of(student));
         given(studentRepository.findById(student.getId())).willReturn(of(student));
 
         // when
