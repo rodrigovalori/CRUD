@@ -14,7 +14,7 @@ import static io.restassured.RestAssured.given;
     public class BasicAuthTest {
 
         @Test
-        public void BasicAuthenticationTest_whenStatusCode_200(){
+        public void basicAuthenticationTest_whenStatusCode_200(){
             given().auth()
                     .basic("admin", "password")
                     .when()
@@ -25,7 +25,7 @@ import static io.restassured.RestAssured.given;
         }
 
         @Test
-        public void BasicAuthenticationTest_whenStatusCode_401(){
+        public void basicAuthenticationTest_whenStatusCode_401(){
             given().auth()
                     .basic("", "")
                     .when()
@@ -36,7 +36,7 @@ import static io.restassured.RestAssured.given;
         }
 
         @Test
-        public void BasicAuthenticationTest_whenStatusCode_404(){
+        public void basicAuthenticationTest_whenStatusCode_404(){
             given().auth()
                     .basic("admin", "password")
                     .when()
