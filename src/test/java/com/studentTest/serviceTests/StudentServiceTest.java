@@ -1,20 +1,18 @@
-package com.example.demo.studentTest.serviceUnitTests;
+package com.studentTest.serviceTests;
 
-import com.example.demo.student.model.Student;
-import com.example.demo.student.repository.StudentRepository;
-import com.example.demo.student.service.StudentService;
+import com.student.model.Student;
+import com.student.repository.StudentRepository;
+import com.student.service.StudentService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static java.time.Month.AUGUST;
@@ -157,6 +155,10 @@ class StudentServiceTest {
                 .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
 
         assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
+
+        assertThatThrownBy(() -> underTest.getStudentById(student.getId()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
     }

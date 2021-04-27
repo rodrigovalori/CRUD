@@ -1,4 +1,4 @@
-package com.example.demo.basicAuthTests;
+package com.basicAuthTests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

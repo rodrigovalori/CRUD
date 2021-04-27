@@ -1,7 +1,7 @@
-package com.example.demo.student.service;
+package com.student.service;
 
-import com.example.demo.student.model.Student;
-import com.example.demo.student.repository.StudentRepository;
+import com.student.model.Student;
+import com.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
