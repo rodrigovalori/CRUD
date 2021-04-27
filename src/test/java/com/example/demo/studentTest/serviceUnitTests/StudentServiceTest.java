@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static java.time.Month.AUGUST;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -60,13 +61,17 @@ class StudentServiceTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
+        studentRepository.save(student);
+
+        student.setId(1L);
+
         // when
-        given(studentRepository.findStudentById(student.getId())).willReturn(Optional.of(student));
+        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
 
         underTest.getStudentById(student.getId());
 
         // then
-        verify(studentRepository).findById(student.getId());
+        verify(studentRepository).findStudentById(student.getId());
     }
 
     @Test
@@ -102,8 +107,8 @@ class StudentServiceTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
-        given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(Optional.of(student));
-        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
+        given(studentRepository.findStudentByEmail(student.getEmail())).willReturn(of(student));
+        given(studentRepository.findById(student.getId())).willReturn(of(student));
 
         // when
         // then
@@ -149,11 +154,11 @@ class StudentServiceTest {
         // then
         assertThatThrownBy(() -> underTest.deleteStudent(student.getId()))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Student with id " + student.getId() + " does not exist!");
+                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
 
         assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Student with id " + student.getId() + " does not exist!");
+                .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
     }
 
     @Test
@@ -170,7 +175,7 @@ class StudentServiceTest {
         String name = "Peter";
         String email = "peter@gmail.com";
 
-        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
+        given(studentRepository.findById(student.getId())).willReturn(of(student));
 
         // when
         underTest.updateStudent(student.getId(), name, email);

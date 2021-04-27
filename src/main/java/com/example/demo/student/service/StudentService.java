@@ -24,8 +24,8 @@ public class StudentService {
 
     public List<Student> getStudentById(Long studentId) {
         Optional<Student> existsById = studentRepository.findById(studentId);
-        if(!existsById.isPresent()) {
-            throw new IllegalStateException("Student with id " + studentId + " does not exist!");
+        if(existsById.isEmpty()) {
+            throw new IllegalStateException("Student with id " + studentId + " does not exists!");
         }
         return studentRepository.findStudentById(studentId);
     }
@@ -43,7 +43,7 @@ public class StudentService {
         boolean exists = studentRepository.existsById(studentId);
         if (!exists) {
             throw new IllegalStateException(
-                    "Student with id " + studentId + " does not exist!");
+                    "Student with id " + studentId + " does not exists!");
         }
         studentRepository.deleteById(studentId);
     }
@@ -55,7 +55,7 @@ public class StudentService {
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalStateException(
-                        "Student with id " + studentId + " does not exist!"));
+                        "Student with id " + studentId + " does not exists!"));
 
         if (name != null &&
                 name.length() > 0) {
