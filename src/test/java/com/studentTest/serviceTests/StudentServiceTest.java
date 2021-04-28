@@ -42,7 +42,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void getStudent() {
+    void getAllStudents() {
         // when
         underTest.getAllStudents();
 
