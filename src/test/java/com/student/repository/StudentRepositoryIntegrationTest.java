@@ -1,7 +1,6 @@
-package com.studentTest.repositoryTests;
+package com.student.repository;
 
 import com.student.model.Student;
-import com.student.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import static java.time.Month.AUGUST;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
-public class StudentRepositoryTest {
+public class StudentRepositoryIntegrationTest {
 
     @Autowired
     private StudentRepository underTest;

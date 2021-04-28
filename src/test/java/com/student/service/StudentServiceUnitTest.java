@@ -1,8 +1,7 @@
-package com.studentTest.serviceTests;
+package com.student.service;
 
 import com.student.model.Student;
 import com.student.repository.StudentRepository;
-import com.student.service.StudentService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class StudentServiceTest {
+class StudentServiceUnitTest {
 
     @Mock
     private StudentRepository studentRepository;
