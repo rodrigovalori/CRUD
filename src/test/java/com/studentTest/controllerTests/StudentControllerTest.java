@@ -225,7 +225,6 @@ public class StudentControllerTest {
                 .extract()
                 .response();
 
-        System.out.println(response.getBody().asString());
         Assertions.assertEquals(200, response.statusCode());
         Assertions.assertEquals("Student with id " + student.getId() + " deleted!", response.getBody().asString());
     }
@@ -246,7 +245,6 @@ public class StudentControllerTest {
                 .extract()
                 .response();
 
-        System.out.println(response.getBody().asString());
         Assertions.assertEquals(401, response.statusCode());
     }
 
