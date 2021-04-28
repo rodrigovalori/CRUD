@@ -1,218 +1,293 @@
 package com.studentTest.controllerTests;
 
-import static io.restassured.RestAssured.*;
-import static java.time.Month.AUGUST;
-import static java.time.Month.MAY;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.*;
-
-import javax.annotation.PostConstruct;
-
 import com.student.model.Student;
 import com.student.service.StudentService;
 import io.restassured.http.ContentType;
-
-import net.minidev.json.JSONObject;
+import io.restassured.response.Response;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import io.restassured.response.Response;
+import javax.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static io.restassured.RestAssured.baseURI;
+import static io.restassured.RestAssured.given;
+import static java.time.Month.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class StudentControllerTest {
+
+    @Mock
+    private Student student;
+    private List<Student> studentList;
+
+    @PostConstruct
+    void setUp() throws Exception {
+        student = new Student();
+        student.setId(1L);
+        student.setName("Steve Rogers");
+        student.setEmail("captainAmerica@gmail.com");
+        student.setDob(LocalDate.of(1918, JULY, 4));
+
+        studentList = new ArrayList<>();
+        studentList.add(new Student ("Peter Parker",
+                "spiderMan@gmail.com",
+                LocalDate.of(2001, AUGUST, 10)));
+        studentList.add(new Student ("Tony Stark",
+                "ironMan@gmail.com",
+                LocalDate.of(1970, MAY, 29)));
+
+        baseURI = "http://localhost:" + port + "/";
+    }
 
     @LocalServerPort
     private int port;
 
-    private String uri;
-
-    @PostConstruct
-    public void init() {
-        uri = "http://localhost:" + port;
-    }
-
     @MockBean
-    StudentService studentService;
+    private StudentService studentService;
 
     @Test
-    public void whenGetAllStudentsShouldReturnStatus200() {
+    public void anyMethodWhenPathIsIncorrectShouldReturnStatus404() {
 
-        List<Student> testListStudent = new ArrayList<>();
-        testListStudent.add(
-                new Student ("Peter Parker",
-                "spiderMan@gmail.com",
-                LocalDate.of(2001, AUGUST, 10))
-        );
-        testListStudent.add(
-                new Student ("Tony Stark",
-                        "ironMan@gmail.com",
-                        LocalDate.of(1970, MAY, 29))
-        );
-
-        when(studentService.getAllStudents()).thenReturn(testListStudent);
-
-        List<Student> resultStudent =
-                Arrays.asList(
-                        given().log().all()
-                                .auth()
-                                .basic("admin", "password")
-                                .when().log().all()
-                                .get(uri +  "/api/v1/student")
-                                .then().log().all()
-                                .statusCode(HttpStatus.OK.value())
-                                .extract()
-                                .as(Student[].class));
-
-        assertThat(resultStudent).isEqualTo(testListStudent);
-    }
-
-    @Test
-    public void whenGetAllStudentsShouldReturnStatus401() {
-
-        given().log().all()
+        Response response = given()
+                .port(port)
                 .auth()
-                .basic("", "")
-                .when().log().all()
-                .get(uri +  "/api/v1/student")
-                .then().log().all()
-                .statusCode(HttpStatus.UNAUTHORIZED.value());
+                .basic("admin","password")
+                .contentType(ContentType.JSON)
+                .when()
+                .get(baseURI + "api/v1/studentstudent")
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(404, response.statusCode());
     }
 
     @Test
-    public void whenGetAllStudentsShouldReturnStatus404() {
+    public void getAllStudentsWhenUsernameAndPasswordAreCorrectShouldReturnStatus200() {
 
-        given().log().all()
+        Mockito.when(studentService.getAllStudents()).thenReturn(studentList);
+
+        Response response = given()
+                .port(port)
                 .auth()
-                .basic("admin", "password")
-                .when().log().all()
-                .get(uri +  "/api/v1/stud")
-                .then().log().all()
-                .statusCode(HttpStatus.NOT_FOUND.value());
+                .basic("admin","password")
+                .contentType(ContentType.JSON)
+                .when()
+                .get(baseURI + "api/v1/student/")
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(200, response.statusCode());
     }
 
     @Test
-    public void whenGetStudentsByIdShouldReturnStatus200() {
+    public void getAllStudentsWhenUsernameAndPasswordAreIncorrectShouldReturnStatus401() {
 
-        Student student = new Student(
-                "Peter Parker",
-                "spiderMan@gmail.com",
-                LocalDate.of(2001, AUGUST, 10)
-        );
+        Mockito.when(studentService.getAllStudents()).thenReturn(studentList);
 
-        student.setId(1L);
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("","")
+                .contentType(ContentType.JSON)
+                .when()
+                .get(baseURI + "api/v1/student/")
+                .then()
+                .extract()
+                .response();
 
-        when(studentService.getStudentById(student.getId())).thenReturn(Optional.of(student));
-
-        List<Student> resultStudent = Arrays.asList(
-                given().log().all()
-                        .auth()
-                        .basic("admin", "password")
-                        .contentType("application/json")
-                        .when().log().all()
-                        .get(uri +  "/api/v1/student/"+1L)
-                        .then().log().all()
-                        .statusCode(HttpStatus.OK.value())
-                        .extract()
-                        .as(Student[].class));
-
-        assertThat(resultStudent).isEqualTo(student);
+        Assertions.assertEquals(401, response.statusCode());
     }
 
     @Test
-    @Disabled
-    public void whenRegisterNewStudentShouldReturnStatus200(){
-        Student testStudent = new Student (1L,"Test","test@gmail.com", LocalDate.now(),0);
+    public void getStudentByIdWhenUsernameAndPasswordAreCorrectShouldReturnStatus200() {
 
-        JSONObject request = new JSONObject();
-        request.put("id", testStudent.getId());
-        request.put("email", testStudent.getEmail());
-        request.put("dob", LocalDate.now());
-        request.put("age", testStudent.getAge());
-        request.put("name", testStudent.getName());
+        Mockito.when(studentService.getStudentById(student.getId())).thenReturn(java.util.Optional.of(student));
 
-        //when(studentService.addNewStudent(testStudent)).thenReturn(testStudent);
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("admin","password")
+                .contentType(ContentType.JSON)
+                .when()
+                .get(baseURI + "api/v1/student/" + student.getId())
+                .then()
+                .extract()
+                .response();
 
-        Response response =
-                given().log().all()
-                        .headers("Content-Type", ContentType.JSON, "Accept", ContentType.JSON)
-                        .contentType(ContentType.JSON)
-                        .auth()
-                        .basic("admin", "admin")
-                        .body(request)
-                        .when().log().all()
-                        .post(uri +  "/api/v1/student")
-                        .then().log().all()
-                        .assertThat()
-                        .extract()
-                        .response();
-
-        //Assert.assertEquals(200,response.statusCode());
-        Assertions.assertEquals(testStudent + " posted", response.getBody().asString());
+        Assertions.assertEquals(200, response.statusCode());
     }
 
     @Test
-    @Disabled
-    public void whenDeleteStudentShouldReturnStatus200() {
+    public void getStudentByIdWhenUsernameAndPasswordAreIncorrectShouldReturnStatus401() {
 
-        Student testStudent = new Student (1L,"Test","test@gmail.com", LocalDate.now(),0);
-        //when(studentService.deleteStudent(testStudent.getId())).thenReturn(testStudent.getId());
+        Mockito.when(studentService.getStudentById(student.getId())).thenReturn(java.util.Optional.of(student));
 
-        Response response=
-                given().log().all()
-                        .auth()
-                        .basic("admin", "admin")
-                        .header("Content-type", "application/json")
-                        .when().log().all()
-                        .delete(uri +  "/api/v1/student/" + testStudent.getId())
-                        .then()
-                        .extract()
-                        .response();
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("","")
+                .contentType(ContentType.JSON)
+                .when()
+                .get(baseURI + "api/v1/student/" + student.getId())
+                .then()
+                .extract()
+                .response();
 
-        //Assert.assertEquals(200,response.statusCode());
-        //Assert.assertEquals("The student with ID:"+ testStudent.getId() + " deleted", response.getBody().asString());
-
+        Assertions.assertEquals(401, response.statusCode());
     }
 
     @Test
-    @Disabled
-    public void whenUpdateStudentShouldReturnStatus200() {
+    public void addNewStudentWhenUsernameAndPasswordAreCorrectShouldReturnStatus200() throws JSONException {
 
-        Student testStudent = new Student (1L,"Test","test@gmail.com", LocalDate.now(),0);
-        String newName="Vinicius";
-        String newEmail="vinicius@gmail.com";
+        JSONObject requestParams = new JSONObject();
 
-        List<Student> testListNewStudent = new ArrayList<>();
-        testListNewStudent.add(new Student (1L,newName,newEmail, LocalDate.now(),0));
+        requestParams.put("id", student.getId());
+        requestParams.put("name", student.getName());
+        requestParams.put("email", student.getEmail());
+        requestParams.put("dob", student.getDob());
 
-        //when(studentService.updateStudent(testStudent.getId(),newName,newEmail))
-               // .thenReturn(testListNewStudent);
+        Mockito.when(studentService.addNewStudent(student)).thenReturn(student);
 
-        List<Student> resultStudent =
-                Arrays.asList(
-                        given().log().all()
-                                .auth()
-                                .basic("admin", "admin")
-                                .header("Content-type", "application/json")
-                                .when().log().all()
-                                .put(uri +  "/api/v1/student/" + testStudent.getId() +  "?name=" + newName + "&email=" + newEmail)
-                                .then()
-                                .statusCode(HttpStatus.OK.value())
-                                .extract()
-                                .as(Student[].class));
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("admin","password")
+                .header("Content-Type","application/json")
+                .body(requestParams.toString())
+                .when()
+                .post("api/v1/student/")
+                .then()
+                .extract()
+                .response();
 
-        assertThat(resultStudent).isEqualTo(testListNewStudent);
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("Student " + student.getName() + " added!", response.getBody().asString());
+    }
 
+    @Test
+    public void addNewStudentWhenUsernameAndPasswordAreIncorrectShouldReturnStatus401() throws JSONException {
+
+        JSONObject requestParams = new JSONObject();
+
+        requestParams.put("id", student.getId());
+        requestParams.put("name", student.getName());
+        requestParams.put("email", student.getEmail());
+        requestParams.put("dob", student.getDob());
+
+        Mockito.when(studentService.addNewStudent(student)).thenReturn(student);
+
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("","")
+                .header("Content-Type","application/json")
+                .body(requestParams.toString())
+                .when()
+                .post("api/v1/student/")
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(401, response.statusCode());
+        Assertions.assertEquals("", response.getBody().asString());
+    }
+
+    @Test
+    public void deleteStudentWhenUsernameAndPasswordAreCorrectShouldReturnStatus200() {
+
+        Mockito.when(studentService.deleteStudent(student.getId())).thenReturn(student.getId());
+
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("admin","password")
+                .header("Content-Type","application/json")
+                .when()
+                .delete("api/v1/student/" + student.getId())
+                .then()
+                .extract()
+                .response();
+
+        System.out.println(response.getBody().asString());
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("Student with id " + student.getId() + " deleted!", response.getBody().asString());
+    }
+
+    @Test
+    public void deleteStudentWhenUsernameAndPasswordAreIncorrectShouldReturnStatus401() {
+
+        Mockito.when(studentService.deleteStudent(student.getId())).thenReturn(student.getId());
+
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("","")
+                .header("Content-Type","application/json")
+                .when()
+                .delete("api/v1/student/1")
+                .then()
+                .extract()
+                .response();
+
+        System.out.println(response.getBody().asString());
+        Assertions.assertEquals(401, response.statusCode());
+    }
+
+    @Test
+    public void updateStudentWhenUsernameAndPasswordAreCorrectShouldReturnStatus200() {
+
+        Mockito.when(studentService.updateStudent(student.getId(), student.getName(), student.getEmail())).thenReturn(studentList);
+
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("admin","password")
+                .header("Content-Type","application/json")
+                .when()
+                .put("api/v1/student/" + student.getId() + "?name=" + student.getName() + "?email=" + student.getEmail())
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(200, response.statusCode());
+        Assertions.assertEquals("Student with id " + student.getId() + " updated!", response.getBody().asString());
+    }
+
+    @Test
+    public void updateStudentWhenUsernameAndPasswordAreIncorrectShouldReturnStatus401() {
+
+        Mockito.when(studentService.updateStudent(student.getId(), student.getName(), student.getEmail())).thenReturn(studentList);
+
+        Response response = given()
+                .port(port)
+                .auth()
+                .basic("","")
+                .header("Content-Type","application/json")
+                .when()
+                .put("api/v1/student/" + student.getId() + "?name=" + student.getName() + "?email=" + student.getEmail())
+                .then()
+                .extract()
+                .response();
+
+        Assertions.assertEquals(401, response.statusCode());
+        Assertions.assertEquals("", response.getBody().asString());
     }
 }

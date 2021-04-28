@@ -30,26 +30,28 @@ public class StudentService {
         return studentRepository.findById(studentId);
     }
 
-    public void addNewStudent(Student student) {
+    public Student addNewStudent(Student student) {
         Optional<Student> studentEmailExists = studentRepository
                 .findByEmail(student.getEmail());
         if (studentEmailExists.isPresent()) {
             throw new IllegalStateException("Email " + student.getEmail() + " taken!");
         }
         studentRepository.save(student);
+        return student;
     }
 
-    public void deleteStudent(Long studentId) {
+    public Long deleteStudent(Long studentId) {
         boolean exists = studentRepository.existsById(studentId);
         if (!exists) {
             throw new IllegalStateException(
                     "Student with id " + studentId + " does not exists!");
         }
         studentRepository.deleteById(studentId);
+        return studentId;
     }
 
     @Transactional
-    public void updateStudent(Long studentId,
+    public List<Student> updateStudent(Long studentId,
                               String name,
                               String email) {
 
@@ -70,5 +72,6 @@ public class StudentService {
             }
             student.setEmail(email);
         }
+        return null;
     }
 }
