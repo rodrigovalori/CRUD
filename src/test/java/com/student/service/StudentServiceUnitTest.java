@@ -75,9 +75,11 @@ class StudentServiceUnitTest {
     void addNewStudent() {
         // given
         Student student = new Student(
+                1L,
                 "Peter Parker",
                 "spiderMan@gmail.com",
-                LocalDate.of(2001, AUGUST, 10)
+                LocalDate.of(2001, AUGUST, 10),
+                21
         );
 
         // when

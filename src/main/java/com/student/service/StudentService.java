@@ -2,6 +2,7 @@ package com.student.service;
 
 import com.student.model.Student;
 import com.student.repository.StudentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class StudentService {
 
     private final StudentRepository studentRepository;
@@ -20,6 +22,7 @@ public class StudentService {
     }
 
     public List<Student> getAllStudents() {
+        log.info("Returning getAllStudents");
         return studentRepository.findAll();
     }
 
@@ -28,6 +31,7 @@ public class StudentService {
         if(existsById.isEmpty()) {
             throw new IllegalStateException("Student with id " + studentId + " does not exists!");
         }
+        log.info("Returning getStudentById");
         return studentRepository.findById(studentId);
     }
 
@@ -37,7 +41,9 @@ public class StudentService {
         if (studentEmailExists.isPresent()) {
             throw new IllegalStateException("Email " + student.getEmail() + " taken!");
         }
+        log.info("Saving a new student");
         studentRepository.save(student);
+        log.info("Returning: Student " + student.getName() + " added!");
         return student;
     }
 
@@ -47,7 +53,9 @@ public class StudentService {
             throw new IllegalStateException(
                     "Student with id " + studentId + " does not exists!");
         }
+        log.info("Deleting student");
         studentRepository.deleteById(studentId);
+        log.info("Returning: Student with id " + studentId + " deleted!");
         return studentId;
     }
 
@@ -62,6 +70,7 @@ public class StudentService {
 
         if (name != null &&
                 name.length() > 0) {
+            log.info("Updating student name");
             student.setName(name);
         }
 
@@ -71,8 +80,10 @@ public class StudentService {
             if (existsByEmail.isPresent()) {
                 throw new IllegalStateException("Email " + email + " taken!");
             }
+            log.info("Updating student email");
             student.setEmail(email);
         }
-        return null;
+        log.info("Returning: Student with id " + studentId + " updated!");
+        return List.of(student);
     }
 }
