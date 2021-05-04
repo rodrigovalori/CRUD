@@ -60,8 +60,6 @@ class StudentServiceUnitTest {
 
         student.setId(1L);
 
-        studentRepository.save(student);
-
         // when
         given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
 
@@ -172,8 +170,6 @@ class StudentServiceUnitTest {
                 "spiderMan@gmail.com",
                 LocalDate.of(2001, AUGUST, 10)
         );
-
-        studentRepository.save(student);
 
         String name = "Peter";
         String email = "peter@gmail.com";

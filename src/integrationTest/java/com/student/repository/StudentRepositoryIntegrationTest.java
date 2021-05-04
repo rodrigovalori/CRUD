@@ -1,7 +1,6 @@
 package com.student.repository;
 
 import com.student.model.Student;
-import com.student.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
