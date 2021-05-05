@@ -58,26 +58,20 @@ class StudentServiceUnitTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
-        student.setId(1L);
-
-        // when
-        given(studentRepository.findById(student.getId())).willReturn(Optional.of(student));
+        given(studentRepository.existsById(student.getId())).willReturn(true);
 
         underTest.getStudentById(student.getId());
 
-        // then
-        assertThat(studentRepository.findById(student.getId())).isEqualTo(Optional.of(student));
+        verify(studentRepository).existsById(student.getId());
     }
 
     @Test
     void addNewStudent() {
         // given
         Student student = new Student(
-                1L,
                 "Peter Parker",
                 "spiderMan@gmail.com",
-                LocalDate.of(2001, AUGUST, 10),
-                21
+                LocalDate.of(2001, AUGUST, 10)
         );
 
         // when

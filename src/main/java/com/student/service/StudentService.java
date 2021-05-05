@@ -27,8 +27,8 @@ public class StudentService {
     }
 
     public Optional<Student> getStudentById(Long studentId) {
-        Optional<Student> existsById = studentRepository.findById(studentId);
-        if(existsById.isEmpty()) {
+        boolean existsById = studentRepository.existsById(studentId);
+        if(!existsById) {
             throw new IllegalStateException("Student with id " + studentId + " does not exists!");
         }
         log.info("Returning getStudentById");
