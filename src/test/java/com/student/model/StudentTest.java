@@ -1,11 +1,9 @@
 package com.student.model;
 
 import com.student.repository.StudentRepository;
-import com.student.service.StudentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -13,7 +11,6 @@ import java.time.LocalDate;
 import java.time.Period;
 
 import static java.time.Month.AUGUST;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class StudentTest {
