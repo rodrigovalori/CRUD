@@ -89,7 +89,6 @@ class StudentServiceUnitTest {
         assertThat(capturedStudent).isEqualTo(student);
     }
 
-
     @Test
     void exceptionWhenEmailIsTaken() {
         // given
