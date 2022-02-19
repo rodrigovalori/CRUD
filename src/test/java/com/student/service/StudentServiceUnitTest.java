@@ -26,12 +26,12 @@ class StudentServiceUnitTest {
     @Mock
     private StudentRepository studentRepository;
     private AutoCloseable autoCloseable;
-    private StudentService underTest;
+    private StudentService studentService;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new StudentService(studentRepository);
+        studentService = new StudentService(studentRepository);
     }
 
     @AfterEach
@@ -42,7 +42,7 @@ class StudentServiceUnitTest {
     @Test
     void getAllStudents() {
         // when
-        underTest.getAllStudents();
+        studentService.getAllStudents();
 
         // then
         verify(studentRepository).findAll();
@@ -59,7 +59,7 @@ class StudentServiceUnitTest {
 
         given(studentRepository.existsById(student.getId())).willReturn(true);
 
-        underTest.getStudentById(student.getId());
+        studentService.getStudentById(student.getId());
 
         verify(studentRepository).existsById(student.getId());
     }
@@ -74,7 +74,7 @@ class StudentServiceUnitTest {
         );
 
         // when
-        underTest.addNewStudent(student);
+        studentService.addNewStudent(student);
 
         // then
         ArgumentCaptor<Student> studentArgumentCaptor =
@@ -102,11 +102,11 @@ class StudentServiceUnitTest {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.addNewStudent(student))
+        assertThatThrownBy(() -> studentService.addNewStudent(student))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Email " + student.getEmail() + " taken!");
 
-        assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
+        assertThatThrownBy(() -> studentService.updateStudent(student.getId(), student.getName(), student.getEmail()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Email " + student.getEmail() + " taken!");
     }
@@ -123,7 +123,7 @@ class StudentServiceUnitTest {
         given(studentRepository.existsById(student.getId())).willReturn(true);
 
         // when
-        underTest.deleteStudent(student.getId());
+        studentService.deleteStudent(student.getId());
 
         // then
         verify(studentRepository).deleteById(student.getId());
@@ -142,15 +142,15 @@ class StudentServiceUnitTest {
         given(studentRepository.existsById(student.getId())).willReturn(false);
 
         // then
-        assertThatThrownBy(() -> underTest.deleteStudent(student.getId()))
+        assertThatThrownBy(() -> studentService.deleteStudent(student.getId()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
 
-        assertThatThrownBy(() -> underTest.updateStudent(student.getId(), student.getName(), student.getEmail()))
+        assertThatThrownBy(() -> studentService.updateStudent(student.getId(), student.getName(), student.getEmail()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
 
-        assertThatThrownBy(() -> underTest.getStudentById(student.getId()))
+        assertThatThrownBy(() -> studentService.getStudentById(student.getId()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Student with id " + student.getId() + " does not exists!");
     }
@@ -170,7 +170,7 @@ class StudentServiceUnitTest {
         given(studentRepository.findById(student.getId())).willReturn(of(student));
 
         // when
-        underTest.updateStudent(student.getId(), name, email);
+        studentService.updateStudent(student.getId(), name, email);
 
         // then
         assertThat(student.getName()).isEqualTo(name);
