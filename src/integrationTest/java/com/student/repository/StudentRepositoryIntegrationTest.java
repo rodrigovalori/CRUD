@@ -16,11 +16,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class StudentRepositoryIntegrationTest {
 
     @Autowired
-    private StudentRepository underTest;
+    private StudentRepository studentRepository;
 
     @AfterEach
     void tearDown() {
-        underTest.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test
@@ -32,10 +32,10 @@ public class StudentRepositoryIntegrationTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
-        underTest.save(student);
+        studentRepository.save(student);
 
         // when
-        Optional<Student> expected = underTest.findByEmail(student.getEmail());
+        Optional<Student> expected = studentRepository.findByEmail(student.getEmail());
 
         // then
         assertThat(expected.isPresent()).isTrue();
@@ -50,12 +50,12 @@ public class StudentRepositoryIntegrationTest {
                 LocalDate.of(2001, AUGUST, 10)
         );
 
-        underTest.save(student);
+        studentRepository.save(student);
 
         String email = "peter@gmail.com";
 
         // when
-        Optional<Student> expected = underTest.findByEmail(email);
+        Optional<Student> expected = studentRepository.findByEmail(email);
 
         // then
         assertThat(expected.isPresent()).isFalse();
